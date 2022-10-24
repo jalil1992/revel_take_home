@@ -1,7 +1,7 @@
 from django.contrib import admin
 from revel.logger import log
 
-from .models import Shift, ShiftVehicle, Vehicle
+from .models import Vehicle
 
 
 @admin.action(description="Load fixtures")
@@ -44,21 +44,3 @@ class VehicleAdmin(admin.ModelAdmin):
     def shift(self, obj: Vehicle):
         shift = obj.shifts.order_by('-updated_at').first()
         return shift
-
-class ShiftVehicleInLine(admin.TabularInline):
-    model = ShiftVehicle
-    extra = 1
-
-
-@admin.register(Shift)
-class ShiftAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "shift_date",
-        "employee",
-        "created_at",
-        "updated_at",
-
-    )
-    list_filter = ["shift_date", "employee"]
-
