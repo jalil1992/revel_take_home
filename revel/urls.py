@@ -3,7 +3,16 @@ from django.urls import include, path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
+
+from rest_framework import routers
+
+from vehicles.views import VehicleViewSet
+
+router = routers.DefaultRouter()
+router.register("vehicles", VehicleViewSet, "vehicles")
+
 urlpatterns = [
+    path("", include(router.urls)),
     path('vehicles/', include('vehicles.urls')),
     path('shifts/', include('shifts.urls')),
     re_path(r"^admin/", admin.site.urls),  # admin

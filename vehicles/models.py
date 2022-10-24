@@ -1,10 +1,8 @@
 import datetime
 
-from django.db import models
-
-from django.utils.translation import gettext_lazy as _
-
 from common.models import BaseModel
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class VehicleModelEnum(models.TextChoices):
@@ -18,3 +16,12 @@ class Vehicle(BaseModel):
     model = models.CharField(max_length=255, choices=VehicleModelEnum.choices, default=VehicleModelEnum.UNKNOWN, verbose_name = _(u'Model'), help_text = _(u'The brand model name of this vehicle.'))
     location_lat = models.FloatField(default=0, verbose_name = _(u'Latitude'), help_text = _(u'Current location latitude.'))
     location_long = models.FloatField(default=0, verbose_name = _(u'Longitude'), help_text = _(u'Current location longitude.'))
+
+    def __str__(self):
+        """License plate will be used to identify vehicles"""
+        return self.license_plate
+
+    @property
+    def need_swap_battery(self):
+        """Define the status of <need a swap>"""
+        return self.battery_level < 10
