@@ -1,0 +1,7 @@
+dj-database-url
+django
+django-filter
+django-cors-headers
+djangorestframework
+drf-yasg
+python-decouple
