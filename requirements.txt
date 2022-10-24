@@ -16,18 +16,12 @@ coreschema==0.0.4
     # via
     #   coreapi
     #   drf-yasg
-dj-database-url==1.0.0
-    # via -r requirements.in
 django==4.1.2
     # via
     #   -r requirements.in
-    #   dj-database-url
-    #   django-cors-headers
     #   django-filter
     #   djangorestframework
     #   drf-yasg
-django-cors-headers==3.13.0
-    # via -r requirements.in
 django-filter==22.1
     # via -r requirements.in
 djangorestframework==3.14.0
@@ -50,8 +44,6 @@ packaging==21.3
     # via drf-yasg
 pyparsing==3.0.9
     # via packaging
-python-decouple==3.6
-    # via -r requirements.in
 pytz==2022.5
     # via
     #   djangorestframework

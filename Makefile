@@ -38,7 +38,7 @@ install: # install dependencies
 init: # initialize
 	virtualenv venv && \
 	venv\scripts\activate && \
-	pip install pip-tools && \
+	pip install pip-tools
 
 ##########################################################################
 # BACKEND
