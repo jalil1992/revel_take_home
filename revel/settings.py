@@ -37,6 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # swagger ui documentation generator
+    "drf_yasg",
+
+    # third party packages
+    "rest_framework",
+    "django_filters",
+
     # main apps
     "common",
     "vehicles",
