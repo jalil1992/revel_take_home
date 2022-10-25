@@ -77,14 +77,13 @@ class ShiftAutoCreateView(views.APIView):
         request_body=ShiftAutoCreateSerializer,
         responses={200: ShiftSerializer, 500: "Internal server error"},
     )
-    def post(self, request, *args, **kwargs):
-        print(request)
+    def post(self, request):
         serializer = ShiftAutoCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         data = serializer.validated_data
         start_point = (data["start_lat"], data["start_long"])
-        count = data["count"]
+        count = data.get("count", 20)
 
         # below is assuming the same logic to the property Vehicle.can_be_added_to_shift but using query for performance
         vehicles = list(Vehicle.objects.exclude(in_use=True).filter(battery_level__lt=LOW_BATTERY_LEVEL))
@@ -93,13 +92,13 @@ class ShiftAutoCreateView(views.APIView):
         vehicles = sorted(vehicles, key=lambda x: x.distance_to(start_point))
 
         # choose first {count} vehicles
-        vehicles = vehicles[:count]
+        vehicles = vehicles[: int(count)]
 
         # decide the visit order
         # a well-known travelling salesman problem and it's of NP hard
         # so will use a greedy algo that just picks the closest one at each step
         ordered_vehicles = []
-        while len(ordered_vehicles) < len(vehicles):
+        while len(vehicles) > 0:
             vehicles = sorted(vehicles, key=lambda x: x.distance_to(start_point))
 
             ordered_vehicles.append(vehicles[0])
