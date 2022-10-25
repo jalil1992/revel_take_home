@@ -1,4 +1,5 @@
 import datetime
+from typing import List
 
 from common.models import BaseModel
 from django.db import models
@@ -13,6 +14,38 @@ class Shift(BaseModel):
 
     def __str__(self):
         return f'Shift #{self.id} of #{self.employee} ({self.shift_date.strftime("%m-%d-%Y %a")})'
+
+    def add_vehicles(self, vehicles:List[Vehicle])->int:
+        """Add vehicles to the end of the shift and return the shift size"""
+        # get the last order
+        orders = self.vehicles.all().values_list('order', flat=True)
+        max_order = max(orders)
+
+        # add vehicle one by one to the end of the shift
+        new_shift_vehicles = []
+        v:Vehicle
+        for v in vehicles:
+            if v.can_be_added_to_shift:
+                continue # <- possible consideration: might need to check if vehicle is in use, if it needs swap ...
+
+            new_shift_vehicles.append(
+                ShiftVehicle(shift=self, vehicle=v, order = max_order)
+            )
+            max_order += 1
+
+        # bulk create
+        ShiftVehicle.objects.bulk_create(new_shift_vehicles)
+
+        return self.vehicles.all().count()
+
+    @property
+    def finished_vehicles(self)->List[str]:
+        return [v.license_plate for v in self.vehicles.all() if not v.need_swap_battery]
+
+    @property
+    def is_completed(self)->bool:
+        finished = self.finished_vehicles
+        return len(finished) == self.vehicles.all().count()
 
 
 class ShiftVehicle(models.Model):

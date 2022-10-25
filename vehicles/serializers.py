@@ -6,7 +6,7 @@ from rest_framework import serializers
 from .models import Vehicle
 
 
-class VehicleCreateUpdateSerializer(serializers.ModelSerializer):
+class VehicleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
         fields = (
@@ -17,6 +17,27 @@ class VehicleCreateUpdateSerializer(serializers.ModelSerializer):
             "location_lat",
             "location_long",
         )
+        extra_kwargs = {
+            "location_lat": {"required": False},
+            "location_long": {"required": False},
+            "battery_level": {"required": False},
+        }
+
+class VehicleUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vehicle
+        fields = (
+            "battery_level",
+            "in_use",
+            "location_lat",
+            "location_long",
+        )
+        extra_kwargs = {
+            "location_lat": {"required": False},
+            "location_long": {"required": False},
+            "battery_level": {"required": False},
+            "in_use": {"required": False},
+        }
 
 class VehicleReadSerializer(serializers.ModelSerializer):
     location = serializers.SerializerMethodField()
